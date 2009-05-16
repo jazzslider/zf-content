@@ -17,7 +17,11 @@ interface Content_Model_Content_Interface
   public function __isset($property);
   public function __unset($property);
 
+  public function save();
+  public function delete();
+
   public function getId();
+  public function getClass();
 
   public function getForm();
 

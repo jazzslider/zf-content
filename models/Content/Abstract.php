@@ -68,6 +68,10 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
       throw new Exception('Initial data must be array or object');
     }
 
+    if (array_key_exists('class', $data)) {
+      unset($data['class']);
+    }
+
     foreach ($data as $key => $value) {
       $this->$key = $value;
     }
