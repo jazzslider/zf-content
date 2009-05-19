@@ -180,7 +180,11 @@ abstract class Content_Model_Mapper_DbTable_Abstract implements Content_Model_Ma
 
   public function getPlugins()
   {
-    throw new Exception('not yet implemented');
+    $resource = $this->getBootstrap()->getPluginResource('modules');
+    $moduleBootstraps = $resource->getExecutedBootstraps();
+    $moduleBootstrap = $moduleBootstraps['content'];
+    $moduleBootstrap->bootstrap('mapperplugins');
+    return $moduleBootstrap->getResource('mapperplugins');
   }
 
   protected function _postLoad(Content_Model_Content_Interface $model)

@@ -240,7 +240,7 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
 
   protected function _postGetForm()
   {
-    foreach ($this->_getPlugins() as $plugin) {
+    foreach ($this->getPlugins() as $plugin) {
       $modelClass = $plugin->getModelClass();
       if ($this instanceof $modelClass) {
         $this->_form = $plugin->postGetForm($this, $this->_form);
@@ -262,7 +262,7 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
 
   protected function _postPopulateForm($form)
   {
-    foreach ($this->_getPlugins() as $plugin) {
+    foreach ($this->getPlugins() as $plugin) {
       $modelClass = $plugin->getModelClass();
       if ($this instanceof $modelClass) {
         $form = $plugin->postPopulateForm($this, $form);
@@ -284,7 +284,7 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
 
   protected function _postPopulateFromForm($form)
   {
-    foreach ($this->_getPlugins() as $plugin) {
+    foreach ($this->getPlugins() as $plugin) {
       $modelClass = $plugin->getModelClass();
       if ($this instanceof $modelClass) {
         $plugin->postPopulateFromForm($this, $form);
@@ -293,12 +293,12 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
     return $this;
   }
 
-  protected function _getPlugins()
+  public function getPlugins()
   {
     $resource = $this->getBootstrap()->getPluginResource('modules');
     $moduleBootstraps = $resource->getExecutedBootstraps();
     $moduleBootstrap = $moduleBootstraps['content'];
-    $moduleBootstrap->bootstrap('plugins');
-    return $moduleBootstrap->getResource('plugins');
+    $moduleBootstrap->bootstrap('contentplugins');
+    return $moduleBootstrap->getResource('contentplugins');
   }
 }
