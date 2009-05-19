@@ -7,7 +7,7 @@ class Content_Model_Revision extends Content_Model_Content_Abstract
   public function preInit()
   {
     $this->_data = array_merge($this->_data, array(
-      'page'       => null,
+      'model'      => null,
       'active'     => null,
       'title'      => null,
       'body'       => null,
@@ -21,15 +21,17 @@ class Content_Model_Revision extends Content_Model_Content_Abstract
     throw new Exception('not yet implemented');
   }
 
-  public function setPage($page)
+  public function setModel($model)
   {
-    if (!($page instanceof Content_Model_Page)) {
-      $page = $this->getPageMapper()->find($page);
-      if (!($page instanceof Content_Model_Page)) {
+    if (!($model instanceof Content_Model_Content_Interface)) {
+      // default is to get a Content_Model_Page instance using the argument
+      // as an ID
+      $model = $this->getPageMapper()->find($model);
+      if (!($model instanceof Content_Model_Content_Interface)) {
         throw new Exception('data integrity error');
       }
     }
-    $this->_data['page'] = $page;
+    $this->_data['model'] = $model;
     return $this;
   }
 
