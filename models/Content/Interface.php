@@ -32,4 +32,11 @@ interface Content_Model_Content_Interface
    * @return Content_Model_Content_Interface provides a fluent interface
    */
   public function populateFromForm(Zend_Form $form);
+
+  public function getActionNavigation($type = 'instance');
+  public function getIndexPage();
+  public function getCreatePage();
+  public function getViewPage();
+  public function getEditPage();
+  public function getDeletePage();
 }

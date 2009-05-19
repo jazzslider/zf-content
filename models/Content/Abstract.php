@@ -291,17 +291,6 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
     return $form;
   }
 
-  protected function _postPopulateForm($form)
-  {
-    foreach ($this->getPlugins() as $plugin) {
-      $modelClass = $plugin->getModelClass();
-      if ($this instanceof $modelClass) {
-        $form = $plugin->postPopulateForm($this, $form);
-      }
-    }
-    return $form;
-  }
-
   public function populateFromForm(Zend_Form $form)
   {
     foreach ($form->getElements() as $element) {
@@ -313,15 +302,24 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
     return $this;
   }
 
-  protected function _postPopulateFromForm($form)
+  public function getActionNavigation($type = 'instance')
   {
-    foreach ($this->getPlugins() as $plugin) {
-      $modelClass = $plugin->getModelClass();
-      if ($this instanceof $modelClass) {
-        $plugin->postPopulateFromForm($this, $form);
-      }
+    switch ($type) {
+      case 'listing' :
+        return new Zend_Navigation(array(
+          $this->getCreatePage(),
+        ));
+        break;
+      case 'instance' :
+      default :
+        return new Zend_Navigation(array(
+          $this->getIndexPage(),
+          $this->getViewPage(),
+          $this->getEditPage(),
+          $this->getDeletePage(),
+        ));
+        break;
     }
-    return $this;
   }
 
   public function getPlugins()
@@ -331,5 +329,27 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
     $moduleBootstrap = $moduleBootstraps['content'];
     $moduleBootstrap->bootstrap('contentplugins');
     return $moduleBootstrap->getResource('contentplugins');
+  }
+
+  protected function _postPopulateForm($form)
+  {
+    foreach ($this->getPlugins() as $plugin) {
+      $modelClass = $plugin->getModelClass();
+      if ($this instanceof $modelClass) {
+        $form = $plugin->postPopulateForm($this, $form);
+      }
+    }
+    return $form;
+  }
+
+  protected function _postPopulateFromForm($form)
+  {
+    foreach ($this->getPlugins() as $plugin) {
+      $modelClass = $plugin->getModelClass();
+      if ($this instanceof $modelClass) {
+        $plugin->postPopulateFromForm($this, $form);
+      }
+    }
+    return $this;
   }
 }
