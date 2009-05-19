@@ -2,9 +2,6 @@
 
 abstract class Content_Model_Content_Abstract implements Content_Model_Content_Interface
 {
-  const STATUS_PUBLISHED = 1;
-  const STATUS_DRAFT     = 0;
-
   /**
    * Internal data array
    *
@@ -12,8 +9,6 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
    */
   protected $_data = array(
     'id'        => null,
-    'slug'      => null,
-    'status'    => null,
     'published' => null,
   );
 
@@ -225,15 +220,6 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
       $this->_data[$property] = null;
       return $this;
     }
-    return $this;
-  }
-
-  public function setStatus($status)
-  {
-    if (!in_array($status, array(self::STATUS_PUBLISHED, self::STATUS_DRAFT))) {
-      throw new Exception('invalid status');
-    }
-    $this->_data['status'] = $status;
     return $this;
   }
 
