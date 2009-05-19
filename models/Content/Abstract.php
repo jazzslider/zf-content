@@ -2,12 +2,20 @@
 
 abstract class Content_Model_Content_Abstract implements Content_Model_Content_Interface
 {
+  const STATUS_PUBLISHED = 1;
+  const STATUS_DRAFT     = 0;
+
   /**
    * Internal data array
    *
    * @var array
    */
-  protected $_data = array();
+  protected $_data = array(
+    'id'        => null,
+    'slug'      => null,
+    'status'    => null,
+    'published' => null,
+  );
 
   /**
    * Form class
@@ -40,12 +48,17 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
   public function __construct($data,
                               Zend_Application_Bootstrap_Bootstrapper $bootstrap)
   {
+    $this->preInit();
     $this->setBootstrap($bootstrap);
     $this->populate($data);
-    $this->init();
+    $this->postInit();
   }
 
-  public function init()
+  public function preInit()
+  {
+  }
+
+  public function postInit()
   {
   }
 
@@ -212,6 +225,24 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
       $this->_data[$property] = null;
       return $this;
     }
+    return $this;
+  }
+
+  public function setStatus($status)
+  {
+    if (!in_array($status, array(self::STATUS_PUBLISHED, self::STATUS_DRAFT))) {
+      throw new Exception('invalid status');
+    }
+    $this->_data['status'] = $status;
+    return $this;
+  }
+
+  public function setPublished($published)
+  {
+    if (!($published instanceof Zend_Date)) {
+      $published = new Zend_Date($published, Zend_Date::ISO_8601);
+    }
+    $this->_data['published'] = $published;
     return $this;
   }
 
