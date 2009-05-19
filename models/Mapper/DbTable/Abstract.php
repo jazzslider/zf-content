@@ -2,6 +2,9 @@
 
 abstract class Content_Model_Mapper_DbTable_Abstract implements Content_Model_Mapper_Interface
 {
+  /**
+   * @var Zend_Application_Bootstrap_Bootstrapper
+   */
   protected $_bootstrap;
 
   /**
@@ -128,7 +131,7 @@ abstract class Content_Model_Mapper_DbTable_Abstract implements Content_Model_Ma
       }
     }
 
-    throw new Exception('don\'t yet have the necessary paginator adapter ready');
+    return new Zend_Paginator(new Content_Model_Mapper_DbTable_PaginatorAdapter($select, $this));
   }
 
   abstract public function getSelect();
