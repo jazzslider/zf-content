@@ -25,7 +25,7 @@ abstract class Content_Model_Mapper_DbTable_Abstract implements Content_Model_Ma
   /**
    * @var string
    */
-  protected $_iteratorClass;
+  protected $_iteratorClass = 'Content_Model_Iterator';
 
   /**
    * @var string
