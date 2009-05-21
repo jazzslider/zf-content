@@ -7,10 +7,7 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
    *
    * @var array
    */
-  protected $_data = array(
-    'id'        => null,
-    'published' => null,
-  );
+  protected $_data = array();
 
   /**
    * Form class
@@ -223,15 +220,6 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
     return $this;
   }
 
-  public function setPublished($published)
-  {
-    if (!($published instanceof Zend_Date)) {
-      $published = new Zend_Date($published, Zend_Date::ISO_8601);
-    }
-    $this->_data['published'] = $published;
-    return $this;
-  }
-
   /**
    * Get Form
    *
@@ -286,26 +274,6 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
     }
     $this->_postPopulateFromForm($form);
     return $this;
-  }
-
-  public function getActionNavigation($type = 'instance')
-  {
-    switch ($type) {
-      case 'listing' :
-        return new Zend_Navigation(array(
-          $this->getCreatePage(),
-        ));
-        break;
-      case 'instance' :
-      default :
-        return new Zend_Navigation(array(
-          $this->getIndexPage(),
-          $this->getViewPage(),
-          $this->getEditPage(),
-          $this->getDeletePage(),
-        ));
-        break;
-    }
   }
 
   public function getPlugins()

@@ -14,8 +14,10 @@ class Content_Model_Page extends Content_Model_Content_Abstract
   public function preInit()
   {
     $this->_data = array_merge($this->_data, array(
+      'id'        => null,
       'slug'      => null,
       'status'    => null,
+      'published' => null,
       'revisions' => null,
     ));
   }
@@ -87,6 +89,15 @@ class Content_Model_Page extends Content_Model_Content_Abstract
       throw new Exception('invalid status');
     }
     $this->_data['status'] = $status;
+    return $this;
+  }
+
+  public function setPublished($published)
+  {
+    if (!($published instanceof Zend_Date)) {
+      $published = new Zend_Date($published, Zend_Date::ISO_8601);
+    }
+    $this->_data['published'] = $published;
     return $this;
   }
 
@@ -191,5 +202,25 @@ class Content_Model_Page extends Content_Model_Content_Abstract
       return isset($currentRevision->$property);
     }
     return false;
+  }
+
+  public function getActionNavigation($type = 'instance')
+  {
+    switch ($type) {
+      case 'listing' :
+        return new Zend_Navigation(array(
+          $this->getCreatePage(),
+        ));
+        break;
+      case 'instance' :
+      default :
+        return new Zend_Navigation(array(
+          $this->getIndexPage(),
+          $this->getViewPage(),
+          $this->getEditPage(),
+          $this->getDeletePage(),
+        ));
+        break;
+    }
   }
 }
