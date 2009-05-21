@@ -1,0 +1,7 @@
+CREATE TABLE content_posts (
+  id        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  slug      VARCHAR(255) NULL ,
+  status    INT UNSIGNED NOT NULL ,
+  published DATETIME     NOT NULL ,
+  UNIQUE(slug)
+) ENGINE = InnoDB ;
