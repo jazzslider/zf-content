@@ -5,18 +5,14 @@ class Content_Model_Mapper_Revisions extends Content_Model_Mapper_DbTable_Abstra
   protected $_modelClass = 'Content_Model_Revision';
   protected $_tableClass = 'Content_Model_DbTable_Revisions';
 
-  public function findCurrent(Content_Model_Content_Interface $model)
+  public function findCurrent(Content_Model_Post $post)
   {
-    if (null === $model->id) {
+    if (null === $post->id) {
       return null;
     }
 
-    // TODO figure this out...I'd like to be able to offer revision control
-    // for models other than Content_Model_Page, but without a centralized
-    // ID table for everything implementing Content_Model_Content_Interface,
-    // that's going to be really difficult
     $select = $this->getTable()->select();
-    $select->where('model = ?', $model->id);
+    $select->where('post = ?', $post->id);
     $select->order('(active = 1) DESC');
     $select->order('created DESC');
     $select->limit(1);
@@ -35,12 +31,12 @@ class Content_Model_Mapper_Revisions extends Content_Model_Mapper_DbTable_Abstra
     return $this->_models[$revisionRow->id];
   }
 
-  public function findAllByModel(Content_Model_Content_Interface $model, Zend_Db_Table_Select $select = null)
+  public function findAllByPost(Content_Model_Post $post, Zend_Db_Table_Select $select = null)
   {
     if (null === $select) {
       $select = $this->getSelect();
     }
-    $select->where('model = ?', $model->id);
+    $select->where('post = ?', $post->id);
     return $this->findAll($select);
   }
 }

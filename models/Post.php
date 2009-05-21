@@ -1,8 +1,8 @@
 <?php
 
-class Content_Model_Page extends Content_Model_Content_Abstract
+class Content_Model_Post extends Content_Model_Content_Abstract
 {
-  protected $_formClass = 'Content_Form_Page';
+  protected $_formClass = 'Content_Form_Post';
 
   protected $_revisionClass = 'Content_Model_Revision';
   protected $_currentRevision;
@@ -69,7 +69,7 @@ class Content_Model_Page extends Content_Model_Content_Abstract
   public function getRevisions()
   {
     if (null === $this->_data['revisions']) {
-      $this->_data['revisions'] = $this->getRevisionMapper()->findAllByModel($this);
+      $this->_data['revisions'] = $this->getRevisionMapper()->findAllByPost($this);
     }
     return $this->_data['revisions'];
   }
