@@ -134,6 +134,24 @@ abstract class Content_Model_Mapper_DbTable_Abstract implements Content_Model_Ma
     return new Zend_Paginator(new Content_Model_Mapper_DbTable_PaginatorAdapter($select, $this));
   }
 
+  public function delete(Content_Model_Content_Interface $content)
+  {
+    if (null === $content->id) {
+      throw new Exception('Cannot delete without an ID.');
+    }
+
+    $this->_preDelete($content);
+
+    $contentRow = $this->findRow($content->id);
+    $contentRow->delete();
+    unset($this->_rows[$content->id]);
+
+    $this->_postDelete($content);
+    unset($content->id);
+
+    return $content;
+  }
+
   abstract public function getSelect();
 
   public function getTable()

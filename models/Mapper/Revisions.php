@@ -39,4 +39,62 @@ class Content_Model_Mapper_Revisions extends Content_Model_Mapper_DbTable_Abstra
     $select->where('post = ?', $post->id);
     return $this->findAll($select);
   }
+
+  public function save(Content_Model_Content_Interface $revision)
+  {
+    if (!($revision instanceof Content_Model_Revision)) {
+      throw new Exception('this mapper can only save revisions');
+    }
+
+    $this->_preSave($revision);
+
+    if (null === $revision->id) {
+      $revision->active = true;
+      $revisionRow = $this->getTable()->createRow();
+    } else {
+      $revisionRow = $this->findRow($revision->id);
+    }
+
+    $revisionRow->post = $revision->post->id;
+    $revisionRow->active = (integer)$revision->active;
+    if (trim($revision->title) <> '') {
+      $revisionRow->title = $revision->title;
+    } else {
+      $revisionRow->title = null;
+    }
+    if (trim($revision->body) <> '') {
+      $revisionRow->body = $revision->body;
+    } else {
+      $revisionRow->body = null;
+    }
+    if (trim($revision->bodyFilter) <> '') {
+      $revisionRow->bodyFilter = $revision->bodyFilter;
+    } else {
+      $revisionRow->bodyFilter = null;
+    }
+    if (null === $revision->created) {
+      $revision->created = new Zend_Date();
+    }
+    $revisionRow->created = $revision->created->get(Zend_Date::ISO_8601);
+
+    $revisionRow->save();
+    $revision->id = $revisionRow->id;
+
+    $this->_postSave($revision);
+
+    $this->_models[$revision->id] = $revision;
+    $this->_rows[$revisionRow->id] = $revisionRow;
+
+    if ($revision->active) {
+      $this->getBootstrap()->bootstrap('db');
+      $db = $this->getBootstrap()->getResource('db');
+      $firstPart = $db->quoteInto('post = ?', $revision->post->id);
+      $secondPart = $db->quoteInto('id <> ?', $revision->id);
+      $where = "$firstPart AND $secondPart";
+      $this->getTable()->update(array('active' => 0), $where);
+      $revision->post->setCurrentRevision($revision);
+    }
+
+    return $this->_models[$revision->id];
+  }
 }
