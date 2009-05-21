@@ -1,3 +1,13 @@
+--//
+
+CREATE TABLE content_posts (
+  id        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  slug      VARCHAR(255) NULL ,
+  status    INT UNSIGNED NOT NULL ,
+  published DATETIME     NOT NULL ,
+  UNIQUE(slug)
+) ENGINE = InnoDB ;
+
 CREATE TABLE content_revisions (
   id         INT UNSIGNED     NOT NULL AUTO_INCREMENT PRIMARY KEY ,
   post       INT UNSIGNED     NOT NULL ,
@@ -8,3 +18,10 @@ CREATE TABLE content_revisions (
   created    DATETIME         NOT NULL ,
   FOREIGN KEY (post) REFERENCES content_posts(id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE = InnoDB ;
+
+--//@UNDO
+
+DROP TABLE content_revisions ;
+DROP TABLE content_posts ;
+
+--//
