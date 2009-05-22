@@ -19,7 +19,11 @@ class Content_Model_Revision extends Content_Model_Content_Abstract
 
   public function getPostMapper()
   {
-    throw new Exception('not yet implemented');
+    $resource = $this->getBootstrap()->getPluginResource('modules');
+    $moduleBootstraps = $resource->getExecutedBootstraps();
+    $moduleBootstrap = $moduleBootstraps['content'];
+    $moduleBootstrap->bootstrap('postmapper');
+    return $moduleBootstrap->getResource('postmapper');
   }
 
   public function setPost($post)

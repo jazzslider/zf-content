@@ -29,7 +29,11 @@ class Content_Model_Post extends Content_Model_Content_Abstract
 
   public function getRevisionMapper()
   {
-    throw new Exception('not yet implemented');
+    $resource = $this->getBootstrap()->getPluginResource('modules');
+    $moduleBootstraps = $resource->getExecutedBootstraps();
+    $moduleBootstrap = $moduleBootstraps['content'];
+    $moduleBootstrap->bootstrap('revisionmapper');
+    return $moduleBootstrap->getResource('revisionmapper');
   }
 
   public function getCurrentRevision()
