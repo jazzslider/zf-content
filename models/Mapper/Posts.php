@@ -50,4 +50,11 @@ class Content_Model_Mapper_Posts extends Content_Model_Mapper_DbTable_Abstract
 
     return $this->_models[$post->id];
   }
+
+  public function getSelect()
+  {
+    $select = $ths->getTable()->select();
+    $select->from(array('p' => 'content_posts'));
+    return $select;
+  }
 }

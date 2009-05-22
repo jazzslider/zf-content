@@ -97,4 +97,11 @@ class Content_Model_Mapper_Revisions extends Content_Model_Mapper_DbTable_Abstra
 
     return $this->_models[$revision->id];
   }
+
+  public function getSelect()
+  {
+    $select = $this->getTable()->select();
+    $select->from(array('r' => 'content_revisions'));
+    return $select;
+  }
 }
