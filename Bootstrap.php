@@ -11,4 +11,9 @@ class Content_Bootstrap extends Zend_Application_Module_Bootstrap
   {
     return new Content_Model_Plugins();
   }
+
+  protected function _initPostmapper()
+  {
+    return new Content_Model_Mapper_Posts($this->getApplication());
+  }
 }

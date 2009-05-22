@@ -69,4 +69,13 @@ class Content_PostsController extends Zend_Controller_Action
   {
     return $this->getInvokeArg('bootstrap');
   }
+
+  protected function _getMapper()
+  {
+    $resource = $this->_getBootstrap()->getPluginResource('modules');
+    $moduleBootstraps = $resource->getExecutedBootstraps();
+    $moduleBootstrap = $moduleBootstraps['content'];
+    $moduleBootstrap->bootstrap('postmapper');
+    return $moduleBootstrap->getResource('postmapper');
+  }
 }
