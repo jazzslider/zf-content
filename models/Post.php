@@ -27,6 +27,15 @@ class Content_Model_Post extends Content_Model_Content_Abstract
     return $this->_revisionClass;
   }
 
+  public function getPostMapper()
+  {
+    $resource = $this->getBootstrap()->getPluginResource('modules');
+    $moduleBootstraps = $resource->getExecutedBootstraps();
+    $moduleBootstrap = $moduleBootstraps['content'];
+    $moduleBootstrap->bootstrap('postmapper');
+    return $moduleBootstrap->getResource('postmapper');
+  }
+
   public function getRevisionMapper()
   {
     $resource = $this->getBootstrap()->getPluginResource('modules');
@@ -226,5 +235,19 @@ class Content_Model_Post extends Content_Model_Content_Abstract
         ));
         break;
     }
+  }
+
+  public function save()
+  {
+    $mapper = $this->getPostMapper();
+    $mapper->save($this);
+    return $this;
+  }
+
+  public function delete()
+  {
+    $mapper = $this->getPostMapper();
+    $mapper->delete($this);
+    return $this;
   }
 }

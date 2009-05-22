@@ -26,6 +26,15 @@ class Content_Model_Revision extends Content_Model_Content_Abstract
     return $moduleBootstrap->getResource('postmapper');
   }
 
+  public function getRevisionMapper()
+  {
+    $resource = $this->getBootstrap()->getPluginResource('modules');
+    $moduleBootstraps = $resource->getExecutedBootstraps();
+    $moduleBootstrap = $moduleBootstraps['content'];
+    $moduleBootstrap->bootstrap('revisionmapper');
+    return $moduleBootstrap->getResource('revisionmapper');
+  }
+
   public function setPost($post)
   {
     if (!($post instanceof Content_Model_Post)) {
@@ -75,6 +84,20 @@ class Content_Model_Revision extends Content_Model_Content_Abstract
       }
     }
     $this->_data['created'] = $date;
+    return $this;
+  }
+
+  public function save()
+  {
+    $mapper = $this->getRevisionMapper();
+    $mapper->save($this);
+    return $this;
+  }
+
+  public function delete()
+  {
+    $mapper = $this->getRevisionMapper();
+    $mapper->delete($this);
     return $this;
   }
 }

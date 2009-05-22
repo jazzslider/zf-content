@@ -26,8 +26,9 @@ class Content_Form_Post extends Zend_Form
                  ));
 
     $this->addSubForm(new Content_Form_Revision(), 'revision');
+    $this->revision->removeElement('submitBtn');
 
-    $this->addElement('SubmitButton', 'submitBtn');
+    $this->addElement('submit', 'submitBtn');
     $this->submitBtn->setLabel('Submit')
                     ->setOrder(10000);
   }
