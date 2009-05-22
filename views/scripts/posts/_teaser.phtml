@@ -1,0 +1,7 @@
+<div class="post teaser">
+  <h2><a href="<?php echo $this->post->getViewPage()->getHref(); ?>"><?php
+    echo $this->escape($this->post->title);
+  ?></a></h2>
+  <?php echo $this->byline($this->post); ?>
+  <?php echo $this->filter($this->post->teaser, $this->post->bodyFilter); ?>
+</div>
