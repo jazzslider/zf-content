@@ -17,7 +17,28 @@ class Content_Form_Revision extends Zend_Form
                ->setRequired(false)
                ->setFilters(array('StringTrim'));
 
-    // TODO bodyFilter selector...without it, this won't work
+    // TODO this approach to getting the bootstrapper is actually
+    // pretty lame; better to pass it in as a dependency, but I'd
+    // really like to avoid that since this is just a basic Zend_Form
+    // child class...so for now, this should do
+    $installedFilters = array();
+    $frontController = Zend_Controller_Front::getInstance();
+    $bootstrap = $frontController->getParam('bootstrap');
+    $options = $bootstrap->getOptions();
+    if (array_key_exists('content', $options) && array_key_exists('outputFilters', $options['content'])) {
+      $filtersInConfig = $options['content']['outputFilters'];
+      foreach ($filtersInConfig as $filterKey => $filterClass) {
+        $installedFilters[$filterClass] = $filterClass;
+      }
+    }
+
+    $this->addElement('radio', 'bodyFilter');
+    $this->bodyFilter->setLabel('Body output filter')
+                     ->setRequired(true)
+                     ->setMultiOptions($installedFilters)
+                     ->setValidators(array(
+                       array('InArray', false, array(array_keys($installedFilters))),
+                     ));
 
     $this->addElement('submit', 'submitBtn');
     $this->submitBtn->setLabel('Submit')
