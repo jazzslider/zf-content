@@ -86,7 +86,7 @@ class Content_PostsController extends Zend_Controller_Action
       $post->save();
 
       $this->_helper->FlashMessenger->addMessage('Post successfully saved!');
-      $this->_helper->Redirector->gotoUrlAndExit($post->getViewPage()->getHref());
+      $this->_helper->Redirector->gotoUrlAndExit($post->getViewPage()->getHref(), array('prependBase' => FALSE));
       return;
     }
   }
