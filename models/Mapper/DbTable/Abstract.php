@@ -10,12 +10,12 @@ abstract class Content_Model_Mapper_DbTable_Abstract implements Content_Model_Ma
   /**
    * @var array
    */
-  protected $_models;
+  protected $_models = array();
 
   /**
    * @var array
    */
-  protected $_rows;
+  protected $_rows = array();
 
   /**
    * @var Zend_Db_Table_Abstract

@@ -25,8 +25,15 @@ class Content_Form_Post extends Zend_Form
                    array('InArray', true, array(array(Content_Model_Post::STATUS_PUBLISHED, Content_Model_Post::STATUS_DRAFT))),
                  ));
 
-    $this->addSubForm(new Content_Form_Revision(), 'revision');
-    $this->revision->removeElement('submitBtn');
+    // add the elements directly; this allows us to take advantage of the
+    // fact that Content_Model_Content_Abstract::populateFromForm() will
+    // call __set() for every property in the form; the Posts model
+    // automatically sets title, body, and bodyFilter in its newest
+    // revision, so this will work just great
+    $revisionForm = new Content_Form_Revision();
+    $this->addElement($revisionForm->title);
+    $this->addElement($revisionForm->body);
+    $this->addElement($revisionForm->bodyFilter);
 
     $this->addElement('submit', 'submitBtn');
     $this->submitBtn->setLabel('Submit')

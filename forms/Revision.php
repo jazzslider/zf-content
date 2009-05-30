@@ -30,15 +30,14 @@ class Content_Form_Revision extends Zend_Form
       foreach ($filtersInConfig as $filterKey => $filterClass) {
         $installedFilters[$filterClass] = $filterClass;
       }
+      $this->addElement('radio', 'bodyFilter');
+      $this->bodyFilter->setLabel('Body output filter')
+                       ->setRequired(false)
+                       ->setMultiOptions($installedFilters)
+                       ->setValidators(array(
+                         array('InArray', false, array(array_keys($installedFilters))),
+                       ));
     }
-
-    $this->addElement('radio', 'bodyFilter');
-    $this->bodyFilter->setLabel('Body output filter')
-                     ->setRequired(true)
-                     ->setMultiOptions($installedFilters)
-                     ->setValidators(array(
-                       array('InArray', false, array(array_keys($installedFilters))),
-                     ));
 
     $this->addElement('submit', 'submitBtn');
     $this->submitBtn->setLabel('Submit')

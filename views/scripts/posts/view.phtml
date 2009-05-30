@@ -1,0 +1,4 @@
+<?php $this->headTitle($this->escape($this->post->title)); ?>
+<?php $this->actions($this->post->getActionNavigation('instance')); ?>
+<?php echo $this->byline($this->post); ?>
+<?php echo $this->filter($this->post->body, $this->post->bodyFilter); ?>

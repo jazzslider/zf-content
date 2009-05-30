@@ -268,11 +268,10 @@ abstract class Content_Model_Content_Abstract implements Content_Model_Content_I
   public function populateFromForm(Zend_Form $form)
   {
     foreach ($form->getElements() as $element) {
-      if ($this->__isset($element->getName())) {
-        $this->__set($element->getName(), $element->getValue());
-      }
+      $this->__set($element->getName(), $element->getValue());
     }
     $this->_postPopulateFromForm($form);
+    Zend_Debug::dump($this->getNewRevision());
     return $this;
   }
 

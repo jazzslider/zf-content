@@ -1,6 +1,7 @@
 <?php
 
 class Content_Model_Post extends Content_Model_Content_Abstract
+                         implements Zend_Acl_Resource_Interface
 {
   protected $_formClass = 'Content_Form_Post';
 
@@ -10,6 +11,15 @@ class Content_Model_Post extends Content_Model_Content_Abstract
 
   const STATUS_PUBLISHED = 1;
   const STATUS_DRAFT     = 0;
+
+  public function getResourceId()
+  {
+    if (null !== $this->id) {
+      return 'content:post:' . $this->id;
+    } else {
+      return 'content:post';
+    }
+  }
 
   public function preInit()
   {
@@ -73,7 +83,7 @@ class Content_Model_Post extends Content_Model_Content_Abstract
         unset($this->_newRevision->created);
       } else {
         $this->_newRevision = new Content_Model_Revision(array(), $this->getBootstrap());
-        $this->_newRevision->model = $this;
+        $this->_newRevision->post = $this;
       }
     }
     return $this->_newRevision;
@@ -235,6 +245,64 @@ class Content_Model_Post extends Content_Model_Content_Abstract
         ));
         break;
     }
+  }
+
+  public function getIndexPage()
+  {
+    return new Zend_Navigation_Page_Mvc(array(
+      'label'      => 'Index',
+      'module'     => 'content',
+      'controller' => 'posts',
+      'action'     => 'index',
+      'params'     => array(
+        'id' => null,
+      ),
+    ));
+  }
+
+  public function getViewPage()
+  {
+    return new Zend_Navigation_Page_Mvc(array(
+      'label'      => 'View',
+      'module'     => 'content',
+      'controller' => 'posts',
+      'action'     => 'view',
+      'params'     => array(
+        'id' => $this->id,
+      ),
+      'resource'   => $this,
+      'privilege'  => 'view',
+    ));
+  }
+
+  public function getEditPage()
+  {
+    return new Zend_Navigation_Page_Mvc(array(
+      'label'      => 'Edit',
+      'module'     => 'content',
+      'controller' => 'posts',
+      'action'     => 'edit',
+      'params'     => array(
+        'id' => $this->id,
+      ),
+      'resource'   => $this,
+      'privilege'  => 'edit',
+    ));
+  }
+
+  public function getDeletePage()
+  {
+    return new Zend_Navigation_Page_Mvc(array(
+      'label'      => 'Delete',
+      'module'     => 'content',
+      'controller' => 'posts',
+      'action'     => 'delete',
+      'params'     => array(
+        'id' => $this->id,
+      ),
+      'resource'   => $this,
+      'privilege'  => 'delete',
+    ));
   }
 
   public function save()
