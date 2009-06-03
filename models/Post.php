@@ -53,6 +53,7 @@ class Content_Model_Post extends Content_Model_Content_Abstract
       'id'        => null,
       'slug'      => null,
       'status'    => null,
+      'author'    => null,
       'published' => null,
       'revisions' => null,
     ));
@@ -138,6 +139,33 @@ class Content_Model_Post extends Content_Model_Content_Abstract
       throw new Exception('invalid status');
     }
     $this->_data['status'] = $status;
+    return $this;
+  }
+
+  public function setAuthor($author)
+  {
+    if (null !== $author && !($author instanceof Zend_Acl_Role_Interface)) {
+      // The author property needs to be a Zend ACL Role for consistency,
+      // but we don't want to limit it to just Zend_Acl_Role; instead,
+      // allow the plugins a shot at defining it.  That way, an application
+      // or other module can provide its own user model system that would
+      // be fully compatible with this system.
+      foreach ($this->getPlugins() as $plugin) {
+        $modelClass = $plugin->getModelClass();
+        if ($this instanceof $modelClass) {
+          $author = $plugin->loadAuthorRole($author);
+          if ($author instanceof Zend_Acl_Role_Interface) {
+            break;
+          }
+        }
+      }
+      if (!($author instanceof Zend_Acl_Role_Interface)) {
+        // None of the registered plugins could convert the spec
+        // to a role object, so we'll fall back on Zend_Acl_Role.
+        $author = new Zend_Acl_Role($author);
+      }
+    }
+    $this->_data['author'] = $author;
     return $this;
   }
 

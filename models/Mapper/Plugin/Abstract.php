@@ -26,10 +26,26 @@
  * @copyright  Copyright (c) 2009 Adam Jensen
  * @license    http://www.gnu.org/licenses/gpl.txt GNU Public License
  */
-abstract class Content_Model_Mapper_Plugin_Abstract extends Content_Model_Plugin_Abstract
-                                                    implements Content_Model_Mapper_Plugin_Interface
+abstract class Content_Model_Mapper_Plugin_Abstract implements Content_Model_Mapper_Plugin_Interface
 {
+  protected $_bootstrap;
   protected $_modelClass = 'Content_Model_Content_Interface';
+
+  public function __construct(Zend_Application_Bootstrap_Bootstrapper $bootstrap)
+  {
+    $this->setBootstrap($bootstrap);
+  }
+
+  public function getBootstrap()
+  {
+    return $this->_bootstrap;
+  }
+
+  public function setBootstrap(Zend_Application_Bootstrap_Bootstrapper $bootstrap)
+  {
+    $this->_bootstrap = $bootstrap;
+    return $this;
+  }
 
   public function getModelClass()
   {

@@ -56,6 +56,20 @@ class Content_Model_Mapper_Posts extends Content_Model_Mapper_DbTable_Abstract
     } else {
       $postRow->status = Content_Model_Post::STATUS_PUBLISHED;
     }
+    if (null === $post->author) {
+      $auth = Zend_Auth::getInstance();
+      if ($auth->hasIdentity()) {
+        $identity = $auth->getIdentity();
+        if ($identity instanceof Zend_Acl_Role || (is_string($identity) && trim($identity) <> '')) {
+          $post->author = $auth->getIdentity();
+        }
+      }
+    }
+    if (null !== $post->author) {
+      $postRow->author = $post->author->getRoleId();
+    } else {
+      $postRow->author = null;
+    }
     if (null === $post->published) {
       $post->published = new Zend_Date();
     }

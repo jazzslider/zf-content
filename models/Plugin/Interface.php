@@ -29,7 +29,13 @@
 interface Content_Model_Plugin_Interface
 {
   public function __construct(Zend_Application_Bootstrap_Bootstrapper $bootstrap);
-
   public function getBootstrap();
   public function setBootstrap(Zend_Application_Bootstrap_Bootstrapper $bootstrap);
+  public function getModelClass();
+
+  public function postGetForm(Content_Model_Content_Interface $content, Zend_Form $form);
+  public function postPopulateForm(Content_Model_Content_Interface $content, Zend_Form $form);
+  public function postPopulateFromForm(Content_Model_Content_Interface $content, Zend_Form $form);
+
+  public function loadAuthorRole($author);
 }

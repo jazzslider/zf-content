@@ -30,6 +30,10 @@ class Content_View_Helper_Byline extends Zend_View_Helper_Abstract
 {
   public function byline(Content_Model_Post $post, array $options = array())
   {
+    if (!array_key_exists('name', $options) && null !== $post->author) {
+      $options['name'] = $post->author->getRoleId();
+    }
+
     $byline = '';
     $byline .= 'Posted ' . $post->published->get(Zend_Date::DATE_MEDIUM);
     if (array_key_exists('name', $options)) {

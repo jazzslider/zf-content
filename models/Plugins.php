@@ -52,9 +52,6 @@ class Content_Model_Plugins implements Iterator, ArrayAccess, Countable
     if (!is_object($plugin)) {
       $plugin = new $plugin($this->getBootstrap());
     }
-    if (!($plugin instanceof Content_Model_Plugin_Interface)) {
-      throw new Exception('invalid plugin');
-    }
     $this->_plugins[get_class($plugin)] = $plugin;
     return $this;
   }
