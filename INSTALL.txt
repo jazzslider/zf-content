@@ -19,3 +19,7 @@ install the module, please do the following:
 
    content.outputFilters.filter1 = "Content_View_Filter_SafeHtml"
    content.outputFilters.filter2 = "Content_View_Filter_AllHtml"
+
+   Keep in mind that these filters have certain dependencies that must be
+   downloaded separately and installed in your include_path; otherwise, you'll
+   get a fatal error when they're require_once'd.
