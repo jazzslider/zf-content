@@ -91,6 +91,37 @@ class Content_PostsController extends Zend_Controller_Action
     }
   }
 
+  public function deleteAction()
+  {
+    $id = $this->_getParam('id', null);
+    if (null === $id) {
+      throw new Zend_Controller_Action_Exception('No post ID was provided.', 404);
+    } else {
+      if (!is_numeric($id)) {
+        throw new Zend_Controller_Action_Exception('The requested post could not be found.', 404);
+      }
+      $post = $this->_getMapper()->find($id);
+      if (null === $post) {
+        throw new Zend_Controller_Action_Exception('The requested post could not be found.', 404);
+      }
+    }
+
+    $this->view->post = $post;
+    $form = new Content_Form_DeletePost();
+    $this->view->form = $form;
+
+    if ($this->getRequest()->isPost() && $form->isValid($this->_getAllParams())) {
+      if ($form->choice->getValue() == 'Yes') {
+        $post->delete();
+        $this->_helper->FlashMessenger->addMessage('Post successfully deleted!');
+        $this->_helper->Redirector->gotoUrlAndExit($post->getIndexPage()->getHref(), array('prependBase' => FALSE));
+      } else {
+        $this->_helper->FlashMessenger->addMessage('Post not deleted.');
+        $this->_helper->Redirector->gotoUrlAndExit($post->getViewPage()->getHref(), array('prependBase' => FALSE));
+      }
+    }
+  }
+
   protected function _getBootstrap()
   {
     return $this->getInvokeArg('bootstrap');
